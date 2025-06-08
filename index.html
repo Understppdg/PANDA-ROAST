@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ultimate Savage Panda PC Roast</title>
+  <style>
+    body {
+      background: #121212;
+      color: #eee;
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    h1 {
+      color: #e74c3c;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #e74c3c;
+      user-select: none;
+    }
+    #start-btn {
+      padding: 15px 35px;
+      font-size: 1.3rem;
+      background: #e74c3c;
+      border: none;
+      color: #111;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 20px #e74c3c;
+      transition: background 0.3s ease;
+      user-select: none;
+    }
+    #start-btn:hover:not(:disabled) {
+      background: #c0392b;
+    }
+    #start-btn:disabled {
+      background: #7f1f1a;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    /* Popup styles */
+    .popup {
+      position: fixed;
+      width: 320px;
+      max-width: 90vw;
+      background: #1e1e1e;
+      border: 3px solid #e74c3c;
+      box-shadow: 0 0 30px #e74c3c;
+      color: #eee;
+      padding: 20px 25px 25px 25px;
+      border-radius: 14px;
+      font-size: 1rem;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1.5s ease, transform 1.5s ease;
+      user-select: none;
+    }
+    .popup.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .popup h2 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: #e74c3c;
+      font-weight: bold;
+      text-shadow: 0 0 10px #e74c3c;
+      user-select: none;
+    }
+    .popup p {
+      margin: 0;
+      user-select: text;
+    }
+    .close-btn {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      background: transparent;
+      border: none;
+      color: #e74c3c;
+      font-size: 1.4rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .close-btn:hover {
+      color: #ff7961;
+    }
+    /* Fire animation */
+    .fire-emoji {
+      font-size: 3rem;
+      color: #e74c3c;
+      text-shadow: 0 0 8px #ff4c4c, 0 0 20px #e74c3c;
+      animation: flicker 0.8s infinite alternate;
+      margin-bottom: 20px;
+      user-select: none;
+    }
+    @keyframes flicker {
+      0% { opacity: 0.8; }
+      100% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Ultimate Savage Panda PC Roast</h1>
+<button id="start-btn">Start Roasting (Brace Yourself)</button>
+
+<audio autoplay loop muted id="bg-music">
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/27/audio_9af987c8f1.mp3?filename=epic-trailer-11784.mp3" type="audio/mpeg">
+  <!-- Auto-muted because browsers require interaction before sound plays -->
+</audio>
+
+<script>
+  const roasts = [
+    "🔥 Your PC is so slow, Windows files file a missing persons report on it.",
+    "🔥 It takes longer to boot your PC than for a glacier to melt.",
+    "🔥 Your system runs slower than a snail stuck in molasses.",
+    "🔥 Even your 'Fast Startup' setting is just a cruel joke.",
+    "🔥 Your PC is so outdated, it thinks TikTok is a clock app.",
+    "🔥 Opening a web page on your PC is a solid 15-minute meditation.",
+    "🔥 Your browser crashes more than a demolition derby.",
+    "🔥 You’d have better luck sending emails via carrier pigeon.",
+    "🔥 Your computer freezes so much, it could star in a horror flick.",
+    "🔥 Your PC’s idea of multitasking is ‘stalling and crashing.’",
+    "🔥 Your graphics card is just a glorified paperweight.",
+    "🔥 Your hard drive is basically a relic. Archaeologists want it.",
+    "🔥 You need to send a search party every time a file goes missing.",
+    "🔥 The only thing your PC’s fast at is collecting dust.",
+    "🔥 Your keyboard lags so badly, it’s in a different time zone.",
+  ];
+
+  let popupCount = 0;
+  const maxPopups = roasts.length;
+  const startBtn = document.getElementById('start-btn');
+
+  function randomPosition(index) {
+    // Scatter popups diagonally so they don’t overlap fully
+    const top = 50 + (index * 45);
+    const left = 50 + (index * 25);
+    // Limit left to 70vw max to avoid offscreen on small screens
+    return { top: `${top}px`, left: `${Math.min(left, 70)}vw` };
+  }
+
+  function createPopup(message, index) {
+    const popup = document.createElement('div');
+    popup.classList.add('popup');
+    const pos = randomPosition(index);
+    popup.style.top = pos.top;
+    popup.style.left = pos.left;
+    popup.innerHTML = `
+      <button class="close-btn" title="Close popup" onclick="this.parentElement.style.display='none'">&times;</button>
+      <div class="fire-emoji">🔥🔥🔥</div>
+      <h2>Savage Roast #${index + 1}</h2>
+      <p>${message}</p>
+    `;
+    document.body.appendChild(popup);
+
+    setTimeout(() => {
+      popup.classList.add('show');
+    }, 100);
+
+    // Auto close popup after 12 seconds
+    setTimeout(() => {
+      if (popup.parentElement) {
+        popup.parentElement.removeChild(popup);
+      }
+    }, 12000);
+  }
+
+  function roastSlowly() {
+    if (popupCount >= maxPopups) {
+      alert("🔥 All roasts delivered. Panda’s PC can’t take any more! 🔥");
+      startBtn.disabled = false;
+      return;
+    }
+    createPopup(roasts[popupCount], popupCount);
+    popupCount++;
+
+    // Delay increases each time to make it slower & more annoying
+    setTimeout(roastSlowly, 2500 + popupCount * 2500);
+  }
+
+  startBtn.addEventListener('click', () => {
+    startBtn.disabled = true;
+    roastSlowly();
+
+    // Unmute music on first click (some browsers block autoplay sound)
+    const music = document.getElementById('bg-music');
+    music.muted = false;
+  });
+</script>
+
+</body>
+</html>
